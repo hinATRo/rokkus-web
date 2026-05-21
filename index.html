@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rokkus — Roti Kukus & Panggang</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#2c4a1e;--g2:#3a6b28;--g3:#6aaa3a;--g4:#a8d478;--g5:#e8f5d0;
+  --cream:#f5f7ee;--white:#fff;--dark:#1a2410;--mid:#3d5428;--light:#7a9458;
+  --red:#d94f2a;--gold:#c9a030;--brown:#5c3a1e;
+  --shadow:0 3px 18px rgba(42,74,30,0.11);--shadow-lg:0 10px 40px rgba(42,74,30,0.17);
+  --r:16px;--rs:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);}
+
+/* NAVBAR */
+.navbar{position:sticky;top:0;z-index:200;background:rgba(245,247,238,0.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(106,170,58,0.2);padding:0 20px;}
+.nav-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px;}
+.nav-logo img{height:36px;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--g1);letter-spacing:-0.5px;}
+.nav-logo-text span{color:var(--g3);}
+.nav-logo-sub{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--light);margin-top:-2px;}
+.nav-tabs{display:flex;gap:4px;background:var(--g5);border-radius:50px;padding:4px;}
+.nav-tab{padding:8px 22px;border-radius:50px;font-size:.84rem;font-weight:500;color:var(--mid);cursor:pointer;border:none;background:transparent;transition:all .2s;}
+.nav-tab.active{background:var(--g1);color:#fff;box-shadow:0 2px 10px rgba(42,74,30,.25);}
+.nav-tab:hover:not(.active){background:rgba(106,170,58,.18);color:var(--g1);}
+
+/* SECTIONS */
+.section{display:none;}.section.active{display:block;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--g1) 0%,var(--g2) 55%,#4a8a1e 100%);padding:64px 20px 72px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 40%,rgba(168,212,120,.15),transparent 60%);pointer-events:none;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--g4);font-size:.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:6px 18px;border-radius:50px;margin-bottom:22px;animation:fadeUp .6s ease both;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,3.8rem);color:#fff;line-height:1.15;font-weight:700;margin-bottom:12px;animation:fadeUp .6s .1s ease both;}
+.hero h1 em{font-style:italic;color:var(--g4);}
+.hero-sub{color:rgba(255,255,255,.7);font-size:1rem;max-width:420px;margin:0 auto 32px;line-height:1.65;animation:fadeUp .6s .2s ease both;}
+.hero-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fadeUp .6s .3s ease both;}
+.hero-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.78rem;padding:6px 16px;border-radius:50px;display:flex;align-items:center;gap:6px;}
+.hero-contacts{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .6s .35s ease both;}
+.hero-contact{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:.78rem;padding:7px 16px;border-radius:50px;}
+
+/* CATALOG */
+.catalog-wrap{max-width:1080px;margin:0 auto;padding:44px 20px 80px;}
+
+/* Category Section */
+.cat-section{margin-bottom:48px;}
+.cat-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+.cat-label{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--g1);}
+.cat-line{flex:1;height:2px;background:linear-gradient(to right,var(--g4),transparent);}
+.cat-badge{background:var(--g1);color:#fff;font-size:.72rem;font-weight:600;padding:4px 14px;border-radius:50px;letter-spacing:.5px;}
+
+/* Filter chips */
+.filter-wrap{margin-bottom:20px;display:flex;gap:8px;flex-wrap:wrap;}
+.chip{padding:7px 18px;border-radius:50px;font-size:.8rem;font-weight:500;cursor:pointer;border:1.5px solid var(--g4);background:transparent;color:var(--mid);transition:all .2s;}
+.chip.active,.chip:hover{background:var(--g2);border-color:var(--g2);color:#fff;}
+
+/* GRID */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;}
+
+/* CARD */
+.product-card{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s ease,border-color .2s;border:1.5px solid transparent;animation:fadeUp .5s ease both;}
+.product-card:hover{transform:translateY(-5px) scale(1.01);box-shadow:var(--shadow-lg);border-color:var(--g4);}
+.card-img{position:relative;height:180px;background:var(--g5);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.product-card:hover .card-img img{transform:scale(1.07);}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.product-card:hover .card-img img{transform:scale(1.07);}
+.pill{position:absolute;top:10px;left:10px;font-size:.67rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:50px;}
+.pill-star{background:#2c4a1e;color:#fff;}
+.pill-hot{background:var(--red);color:#fff;}
+.pill-new{background:var(--gold);color:#fff;}
+.card-body{padding:14px 16px 18px;}
+.card-name{font-weight:600;font-size:.95rem;color:var(--g1);margin-bottom:3px;line-height:1.3;}
+.card-cat{font-size:.7rem;color:var(--light);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
+.card-price{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--g2);}
+.card-price small{font-family:'DM Sans',sans-serif;font-size:.65rem;color:var(--light);font-weight:400;display:block;line-height:1;margin-bottom:1px;}
+.card-eye{width:32px;height:32px;border-radius:50%;background:var(--g5);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:background .2s;}
+.card-eye:hover{background:var(--g3);color:#fff;}
+
+/* TAMBAHAN grid (smaller) */
+.tambahan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
+.tambahan-card{background:var(--white);border-radius:var(--rs);padding:18px 16px;box-shadow:var(--shadow);cursor:pointer;transition:transform .22s,box-shadow .22s;text-align:center;border:1.5px solid transparent;}
+.tambahan-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--g4);}
+.tambahan-img-wrap{width:72px;height:72px;border-radius:50%;overflow:hidden;margin:0 auto 10px;background:var(--g5);}
+.tambahan-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.tambahan-name{font-weight:600;font-size:.88rem;color:var(--g1);margin-bottom:6px;}
+.tambahan-price{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--g2);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(8,20,6,.65);backdrop-filter:blur(6px);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:22px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;position:relative;transform:translateY(28px) scale(.96);transition:transform .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 80px rgba(8,20,6,.35);}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-img{position:relative;height:300px;overflow:hidden;border-radius:22px 22px 0 0;background:var(--g5);display:flex;align-items:center;justify-content:center;}
+.modal-img img{width:100%;height:100%;object-fit:cover;}
+.modal-img .big-emoji{width:100%;height:100%;overflow:hidden;}
+.modal-img-overlay{position:absolute;bottom:0;left:0;right:0;height:110px;background:linear-gradient(to top,rgba(28,56,16,.65),transparent);}
+.modal-price-overlay{position:absolute;bottom:18px;left:22px;color:#fff;}
+.modal-price-overlay .plabel{font-size:.72rem;opacity:.8;letter-spacing:.5px;text-transform:uppercase;}
+.modal-price-overlay .pval{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;line-height:1.1;}
+.modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;font-size:1.1rem;color:var(--g1);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:all .2s;z-index:10;}
+.modal-close:hover{background:#fff;transform:rotate(90deg);}
+.modal-body{padding:26px 26px 30px;}
+.modal-catline{font-size:.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--g3);margin-bottom:6px;}
+.modal-name{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--g1);line-height:1.2;margin-bottom:10px;}
+.modal-desc{font-size:.92rem;color:var(--mid);line-height:1.7;margin-bottom:20px;}
+.modal-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px;}
+.modal-tag{background:var(--g5);color:var(--g2);font-size:.76rem;font-weight:500;padding:4px 13px;border-radius:50px;}
+.modal-pills{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+.mpill{display:inline-flex;align-items:center;gap:5px;background:var(--g5);color:var(--g1);font-size:.78rem;font-weight:600;padding:6px 14px;border-radius:50px;}
+.modal-actions{display:flex;gap:10px;}
+.btn-order{flex:1;padding:14px 18px;background:var(--g1);color:#fff;border:none;border-radius:var(--rs);font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.btn-order:hover{background:var(--g2);transform:translateY(-1px);}
+.btn-wa{padding:14px 18px;background:#25d366;color:#fff;border:none;border-radius:var(--rs);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.btn-wa:hover{background:#1eb755;transform:translateY(-1px);}
+
+/* PAKET banner */
+.paket-section{background:var(--g1);border-radius:var(--r);padding:28px 28px;margin-bottom:48px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.paket-title{font-family:'Playfair Display',serif;color:#fff;font-size:1.3rem;margin-bottom:4px;}
+.paket-title span{color:var(--g4);}
+.paket-sub{color:rgba(255,255,255,.65);font-size:.82rem;}
+.paket-cards{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto;}
+.paket-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:var(--rs);padding:14px 20px;text-align:center;min-width:160px;}
+.paket-card .pk-name{color:rgba(255,255,255,.8);font-size:.78rem;margin-bottom:4px;}
+.paket-card .pk-price{font-family:'Playfair Display',serif;color:var(--g4);font-size:1.25rem;font-weight:700;}
+.paket-card .pk-desc{color:rgba(255,255,255,.55);font-size:.72rem;margin-top:3px;}
+
+/* TENTANG */
+.tentang-wrap{max-width:900px;margin:0 auto;padding:64px 20px 80px;text-align:center;}
+.tentang-wrap h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--g1);margin-bottom:12px;}
+.tentang-wrap p{color:var(--mid);font-size:.95rem;line-height:1.7;max-width:520px;margin:0 auto 36px;}
+.ttg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;text-align:left;}
+.ttg-card{background:#fff;border-radius:var(--r);padding:24px 20px;box-shadow:var(--shadow);border-top:3px solid var(--g3);}
+.ttg-icon{font-size:1.8rem;margin-bottom:10px;}
+.ttg-card h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--g1);margin-bottom:6px;}
+.ttg-card p{font-size:.82rem;color:var(--light);line-height:1.6;}
+.channel-row{margin-top:36px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
+.channel{background:#fff;border-radius:var(--rs);padding:10px 20px;box-shadow:var(--shadow);font-size:.82rem;font-weight:600;color:var(--mid);}
+
+/* PESAN */
+.pesan-wrap{max-width:560px;margin:0 auto;padding:64px 20px 80px;}
+.pesan-wrap h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--g1);margin-bottom:8px;text-align:center;}
+.pesan-wrap .psub{color:var(--light);font-size:.88rem;text-align:center;margin-bottom:30px;}
+.order-form{background:#fff;border-radius:var(--r);padding:32px;box-shadow:var(--shadow);}
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:.76rem;font-weight:600;color:var(--mid);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:11px 14px;border:1.5px solid var(--g5);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--g3);}
+.fg textarea{min-height:88px;resize:vertical;}
+.submit-btn{width:100%;padding:14px;background:var(--g1);color:#fff;border:none;border-radius:var(--rs);font-size:.95rem;font-weight:600;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
+.submit-btn:hover{background:var(--g2);}
+.contact-box{margin-top:20px;background:var(--g5);border-radius:var(--rs);padding:16px 18px;text-align:center;}
+.contact-box p{font-size:.8rem;color:var(--mid);margin-bottom:6px;}
+.contact-box strong{font-size:.9rem;color:var(--g1);}
+
+/* HALAL badge */
+.halal-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--g4);font-size:.72rem;font-weight:600;padding:5px 14px;border-radius:50px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.product-card:nth-child(1){animation-delay:.04s}.product-card:nth-child(2){animation-delay:.08s}.product-card:nth-child(3){animation-delay:.12s}.product-card:nth-child(4){animation-delay:.16s}.product-card:nth-child(5){animation-delay:.2s}.product-card:nth-child(6){animation-delay:.24s}.product-card:nth-child(7){animation-delay:.28s}.product-card:nth-child(8){animation-delay:.32s}.product-card:nth-child(9){animation-delay:.36s}.product-card:nth-child(10){animation-delay:.4s}.product-card:nth-child(11){animation-delay:.44s}.product-card:nth-child(12){animation-delay:.48s}.product-card:nth-child(13){animation-delay:.52s}.product-card:nth-child(14){animation-delay:.56s}.product-card:nth-child(15){animation-delay:.6s}
+.modal::-webkit-scrollbar{width:4px;}.modal::-webkit-scrollbar-thumb{background:var(--g4);border-radius:4px;}
+@media(max-width:600px){.nav-tabs{gap:2px;}.nav-tab{padding:7px 13px;font-size:.76rem;}.product-grid{grid-template-columns:repeat(2,1fr);gap:12px;}.modal-body{padding:18px 18px 24px;}.modal-actions{flex-direction:column;}.paket-section{flex-direction:column;}.paket-cards{margin-left:0;}}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div>
+      <div class="nav-logo-text">ROK<span>KUS</span>.</div>
+      <div class="nav-logo-sub">Roti Kukus &amp; Panggang</div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showSec('produk',this)">Produk</button>
+      <button class="nav-tab" onclick="showSec('tentang',this)">Tentang</button>
+      <button class="nav-tab" onclick="showSec('pesan',this)">Pesan</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== PRODUK ===== -->
+<div id="sec-produk" class="section active">
+  <div class="hero">
+    <div class="hero-eyebrow">🌿 Halal · Freshly Made Everyday</div>
+    <h1>Roti Kukus &<br><em>Panggang Artisan</em></h1>
+    <p class="hero-sub">Lembut, higienis, tanpa pengawet. Dibuat segar setiap hari dengan bahan pilihan berkualitas.</p>
+    <div class="hero-badges">
+      <div class="hero-badge">🍃 Tanpa Pengawet</div>
+      <div class="hero-badge">🔥 Freshly Made</div>
+      <div class="hero-badge">✅ Halal Indonesia</div>
+      <div class="hero-badge">🛵 GrabFood · ShopeeFood · GoFood</div>
+    </div>
+    <div class="hero-contacts">
+      <div class="hero-contact">📱 0822-9912-1211</div>
+      <div class="hero-contact">📱 0896-5658-3744</div>
+      <div class="hero-contact">📸 @rokkus.id</div>
+    </div>
+  </div>
+
+  <div class="catalog-wrap">
+
+    <!-- FILTER -->
+    <div class="filter-wrap">
+      <button class="chip active" onclick="filterAll(this)">Semua</button>
+      <button class="chip" onclick="filterCat('manis',this)">🍫 Roti Manis</button>
+      <button class="chip" onclick="filterCat('asin',this)">🥩 Roti Asin</button>
+      <button class="chip" onclick="filterCat('tambahan',this)">➕ Tambahan</button>
+    </div>
+
+    <!-- PAKET HEMAT -->
+    <div class="paket-section" id="paketSection">
+      <div>
+        <div class="paket-title">💥 Hemat <span>Banget!</span></div>
+        <div class="paket-sub">Paket spesial pilihan buat kamu yang mau lebih hemat</div>
+      </div>
+      <div class="paket-cards">
+        <div class="paket-card">
+          <div class="pk-name">🍫 Paket Coklat</div>
+          <div class="pk-price">Rp 30.000</div>
+          <div class="pk-desc">3 Roti Coklat Crunchy</div>
+        </div>
+        <div class="paket-card">
+          <div class="pk-name">🍓 Paket Berry</div>
+          <div class="pk-price">Rp 20.000</div>
+          <div class="pk-desc">1 Strawberry + 1 Bluberry</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROTI MANIS -->
+    <div class="cat-section" id="sec-manis">
+      <div class="cat-header">
+        <div class="cat-label">🍫 Roti Manis</div>
+        <div class="cat-line"></div>
+        <div class="cat-badge">14 Varian</div>
+      </div>
+      <div class="product-grid" id="grid-manis"></div>
+    </div>
+
+    <!-- ROTI ASIN -->
+    <div class="cat-section" id="sec-asin">
+      <div class="cat-header">
+        <div class="cat-label">🥩 Roti Asin</div>
+        <div class="cat-line"></div>
+        <div class="cat-badge">8 Varian</div>
+      </div>
+      <div class="product-grid" id="grid-asin"></div>
+    </div>
+
+    <!-- TAMBAHAN -->
+    <div class="cat-section" id="sec-tambahan">
+      <div class="cat-header">
+        <div class="cat-label">➕ Tambahan / Upgrade</div>
+        <div class="cat-line"></div>
+        <div class="cat-badge">4 Pilihan</div>
+      </div>
+      <div class="tambahan-grid" id="grid-tambahan"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== TENTANG ===== -->
+<div id="sec-tentang" class="section">
+  <div class="tentang-wrap">
+    <h2>Tentang Rokkus</h2>
+    <p>Rokkus — Roti Kukus &amp; Panggang hadir untuk menghadirkan roti kukus premium yang lembut, higienis, dan penuh rasa. Dibuat segar setiap hari tanpa bahan pengawet, dengan bahan pilihan berkualitas.</p>
+    <div class="ttg-grid">
+      <div class="ttg-card"><div class="ttg-icon">🌾</div><h3>Bahan Pilihan</h3><p>Menggunakan bahan-bahan berkualitas yang dipilih secara teliti untuk hasil terbaik.</p></div>
+      <div class="ttg-card"><div class="ttg-icon">🍃</div><h3>Tanpa Pengawet</h3><p>Lembut, higienis, bebas pengawet. Freshly made every day untuk kesehatan keluarga.</p></div>
+      <div class="ttg-card"><div class="ttg-icon">🔥</div><h3>Freshly Made</h3><p>Diproduksi setiap hari agar selalu tersedia dalam kondisi segar dan terbaik.</p></div>
+      <div class="ttg-card"><div class="ttg-icon">✅</div><h3>Halal Indonesia</h3><p>Bersertifikat Halal Indonesia — aman dan terpercaya untuk semua kalangan.</p></div>
+    </div>
+    <div class="channel-row">
+      <div class="channel">🛵 GrabFood</div>
+      <div class="channel">🛵 ShopeeFood</div>
+      <div class="channel">🛵 GoFood</div>
+      <div class="channel">📸 @rokkus.id</div>
+    </div>
+    <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <div class="channel">📞 0822-9912-1211</div>
+      <div class="channel">📞 0896-5658-3744</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PESAN ===== -->
+<div id="sec-pesan" class="section">
+  <div class="pesan-wrap">
+    <h2>Buat Pesanan</h2>
+    <p class="psub">Isi form di bawah atau langsung hubungi kami via WhatsApp. Pesanan diterima H-1.</p>
+    <div class="order-form">
+      <div class="fg"><label>Nama Lengkap</label><input type="text" id="oName" placeholder="Nama kamu..."></div>
+      <div class="fg"><label>Nomor WhatsApp</label><input type="tel" id="oWa" placeholder="08xx-xxxx-xxxx"></div>
+      <div class="fg"><label>Pilih Produk</label><select id="oProd"><option value="">-- Pilih Produk --</option></select></div>
+      <div class="fg"><label>Jumlah (pcs)</label><input type="number" id="oQty" min="1" value="1"></div>
+      <div class="fg"><label>Tambahan</label>
+        <select id="oTambahan">
+          <option value="">Tidak ada</option>
+          <option>+ Keju Slice (Rp 2.000)</option>
+          <option>+ Keju Parut (Rp 3.000)</option>
+          <option>+ Telur (Rp 3.000)</option>
+          <option>+ Selai Lain (Rp 3.000)</option>
+        </select>
+      </div>
+      <div class="fg"><label>Catatan Tambahan</label><textarea id="oNote" placeholder="Misal: tanpa gula, extra isian, dll"></textarea></div>
+      <button class="submit-btn" onclick="sendWA()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.523 5.858L.057 23.142a.75.75 0 00.918.918l5.284-1.466A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.731 9.731 0 01-4.96-1.357l-.355-.21-3.676 1.021 1.02-3.558-.228-.367A9.75 9.75 0 1112 21.75z"/></svg>
+        Kirim via WhatsApp
+      </button>
+    </div>
+    <div class="contact-box">
+      <p>Atau hubungi langsung:</p>
+      <strong>0822-9912-1211 &nbsp;·&nbsp; 0896-5658-3744</strong><br>
+      <strong style="color:var(--g3)">@rokkus.id</strong>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOv" onclick="closeMod(event)">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" onclick="closeModDirect()">✕</button>
+    <div class="modal-img">
+      <div class="big-emoji" id="mEmoji"></div>
+      <div class="modal-img-overlay"></div>
+      <div class="modal-price-overlay">
+        <div class="plabel">Harga</div>
+        <div class="pval" id="mPrice"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-catline" id="mCat"></div>
+      <div class="modal-name" id="mName"></div>
+      <div class="modal-desc" id="mDesc"></div>
+      <div class="modal-pills" id="mPills"></div>
+      <div class="modal-tags" id="mTags"></div>
+      <div class="modal-actions">
+        <button class="btn-order" onclick="closeModDirect();showSec('pesan',null)">📋 Pesan Sekarang</button>
+        <button class="btn-wa" id="mWaBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.553 4.122 1.523 5.858L.057 23.142a.75.75 0 00.918.918l5.284-1.466A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.731 9.731 0 01-4.96-1.357l-.355-.21-3.676 1.021 1.02-3.558-.228-.367A9.75 9.75 0 1112 21.75z"/></svg>
+          WA
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA PRODUK ROKKUS (dari menu asli) ──
+// img: foto makanan yang relevan dari Unsplash (placeholder sampai foto asli tersedia)
+const IMG = {
+  coklatKeju:    'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&q=80',
+  nutella:       'https://images.unsplash.com/photo-1474625342403-e0d45e2bf599?w=600&q=80',
+  coklatCrunchy: 'https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=600&q=80',
+  coklatKacang:  'https://images.unsplash.com/photo-1548365328-8c6db3220e4c?w=600&q=80',
+  silverqueen:   'https://images.unsplash.com/photo-1605807646983-377bc5a76493?w=600&q=80',
+  ovomaltine:    'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=600&q=80',
+  lotus:         'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80',
+  srikaya:       'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80',
+  keju:          'https://images.unsplash.com/photo-1486887396153-fa416526c108?w=600&q=80',
+  strawberry:    'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80',
+  bluberry:      'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80',
+  tiramisu:      'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&q=80',
+  greentea:      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+  kacang:        'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80',
+  telurMayo:     'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&q=80',
+  sosisMayo:     'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80',
+  beef:          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80',
+  telurBeef:     'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&q=80',
+  doubleBeef:    'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=600&q=80',
+  kejuSlice:     'https://images.unsplash.com/photo-1552767059-ce182ead6c1b?w=600&q=80',
+  kejuParut:     'https://images.unsplash.com/photo-1486887396153-fa416526c108?w=600&q=80',
+  telur:         'https://images.unsplash.com/photo-1562967914-608f82629710?w=600&q=80',
+  selai:         'https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=600&q=80',
+};
+
+const MANIS = [
+  { name:'Lotus Biscoff',         price:'Rp 18.000', priceN:18000, img:IMG.lotus,         badge:'new', badgeLabel:'New ★',        cat:'Roti Manis', desc:'Isian Lotus Biscoff premium yang creamy dengan cita rasa karamel khas. Aroma wangi biskuit speculoos yang bikin nagih di setiap gigitan!', tags:['New Product','Lotus','Premium','Karamel'] },
+  { name:'Coklat Keju',           price:'Rp 14.000', priceN:14000, img:IMG.coklatKeju,    badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Manis', desc:'Paduan sempurna isian coklat lumer dengan taburan keju cheddar gurih. Salah satu best seller Rokkus yang selalu habis duluan!', tags:['Best Seller','Coklat','Keju'] },
+  { name:'Coklat Kacang',         price:'Rp 15.000', priceN:15000, img:IMG.coklatKacang,  badge:'',    cat:'Roti Manis', desc:'Kombinasi coklat premium dengan kacang yang renyah. Dua tekstur berbeda yang saling melengkapi di tiap gigitan.', tags:['Coklat','Kacang','Crunchy'] },
+  { name:'Nutella Keju',          price:'Rp 18.000', priceN:18000, img:IMG.nutella,        badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Manis', desc:'Isian Nutella hazelnut original yang melimpah dipadukan dengan keju cheddar meleleh. Kombinasi klasik yang tidak pernah salah!', tags:['Best Seller','Nutella','Keju','Hazelnut'] },
+  { name:'Silverqueen Keju',      price:'Rp 21.000', priceN:21000, img:IMG.silverqueen,   badge:'',    cat:'Roti Manis', desc:'Coklat Silverqueen premium yang meleleh lembut berpadu dengan keju cheddar gurih. Untuk pencinta coklat susu berkualitas.', tags:['Silverqueen','Premium','Keju','Coklat Susu'] },
+  { name:'Ovomaltine Keju',       price:'Rp 22.000', priceN:22000, img:IMG.ovomaltine,    badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Manis', desc:'Isian Ovomaltine malt yang khas dan legit dipadukan keju. Rasa unik yang kaya dan menjadi favorit banyak pelanggan setia Rokkus!', tags:['Best Seller','Ovomaltine','Keju','Premium','Malt'] },
+  { name:'Srikaya',               price:'Rp 10.000', priceN:10000, img:IMG.srikaya,        badge:'hot', badgeLabel:'Recommended 👍', cat:'Roti Manis', desc:'Srikaya homemade dengan cita rasa pandan yang harum dan manis legit. Pilihan klasik paling terjangkau yang selalu memanjakan lidah.', tags:['Recommended','Srikaya','Pandan','Klasik'] },
+  { name:'Coklat Crunchy',        price:'Rp 11.000', priceN:11000, img:IMG.coklatCrunchy, badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Manis', desc:'Isian coklat crunchy yang renyah dan meledak di mulut. Best seller yang disukai semua usia — dari anak-anak sampai orang tua!', tags:['Best Seller','Coklat','Crunchy','Renyah'] },
+  { name:'Keju',                  price:'Rp 11.000', priceN:11000, img:IMG.keju,           badge:'',    cat:'Roti Manis', desc:'Isian keju cheddar murni yang gurih dan manis. Simple tapi selalu nikmat dan tidak pernah mengecewakan.', tags:['Keju','Klasik','Gurih Manis'] },
+  { name:'Strawberry',            price:'Rp 11.000', priceN:11000, img:IMG.strawberry,     badge:'',    cat:'Roti Manis', desc:'Selai strawberry yang segar dan sedikit asam membalut roti kukus hijau yang lembut. Kombinasi yang menyegarkan!', tags:['Strawberry','Buah','Segar'] },
+  { name:'Bluberry',              price:'Rp 11.000', priceN:11000, img:IMG.bluberry,        badge:'',    cat:'Roti Manis', desc:'Isian selai bluberry dengan rasa manis segar khas buah biru. Cocok untuk pecinta buah yang ingin camilan unik.', tags:['Bluberry','Buah','Segar'] },
+  { name:'Tiramisu',              price:'Rp 11.000', priceN:11000, img:IMG.tiramisu,        badge:'',    cat:'Roti Manis', desc:'Terinspirasi dari dessert Italia klasik. Perpaduan rasa kopi, coklat, dan cream yang lembut — elegan dalam satu roti kukus!', tags:['Tiramisu','Kopi','Coklat','Premium'] },
+  { name:'Greentea',              price:'Rp 12.000', priceN:12000, img:IMG.greentea,        badge:'',    cat:'Roti Manis', desc:'Isian greentea matcha premium yang punya rasa pahit manis khas. Favorit para pecinta matcha dan teh hijau!', tags:['Greentea','Matcha','Jepang'] },
+  { name:'Kacang (Peanut Butter)',price:'Rp 12.000', priceN:12000, img:IMG.kacang,          badge:'hot', badgeLabel:'Recommended 👍', cat:'Roti Manis', desc:'Peanut butter creamy yang gurih dan sedikit manis. Tinggi protein, cocok untuk sarapan bergizi atau camilan sehat setelah olahraga!', tags:['Recommended','Peanut Butter','Protein','Sehat'] },
+  { name:'Nutella',               price:'Rp 15.000', priceN:15000, img:IMG.nutella,         badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Manis', desc:'Isian Nutella hazelnut original yang berlimpah tanpa campuran. Best seller sejati yang tidak pernah mengecewakan!', tags:['Best Seller','Nutella','Hazelnut','Coklat'] },
+  { name:'Lotus Biscoff (Panggang)',price:'Rp 18.000', priceN:18000, img:IMG.lotus,         badge:'',    cat:'Roti Manis', desc:'Varian panggang dengan isian Lotus Biscoff spread yang creamy dan kaya rasa karamel khas biskuit speculoos.', tags:['Lotus','Biscoff','Premium','Panggang'] },
+  { name:'Silverqueen',           price:'Rp 18.000', priceN:18000, img:IMG.silverqueen,    badge:'',    cat:'Roti Manis', desc:'Isian coklat Silverqueen murni yang premium dan meleleh sempurna. Untuk kamu yang benar-benar mencintai coklat susu berkualitas.', tags:['Silverqueen','Coklat','Premium'] },
+  { name:'Ovomaltine',            price:'Rp 19.000', priceN:19000, img:IMG.ovomaltine,     badge:'hot', badgeLabel:'Recommended 👍', cat:'Roti Manis', desc:'Isian Ovomaltine original yang malty, legit, dan kaya rasa. Rasa khas yang unik dan bikin ketagihan!', tags:['Recommended','Ovomaltine','Malt','Premium'] },
+];
+
+const ASIN = [
+  { name:'Telur Mayo',       price:'Rp 11.000', priceN:11000, img:IMG.telurMayo,  badge:'hot', badgeLabel:'Recommended 👍', cat:'Roti Asin', desc:'Isian telur dengan mayo creamy yang gurih dan lembut. Pilihan terbaik untuk sarapan bergizi yang mengenyangkan!', tags:['Recommended','Telur','Mayo','Sarapan'] },
+  { name:'Sosis Mayo',       price:'Rp 13.000', priceN:13000, img:IMG.sosisMayo,  badge:'',    cat:'Roti Asin', desc:'Sosis juicy yang gurih dipadukan mayo lembut. Pilihan favorit untuk yang suka cita rasa asin yang memuaskan.', tags:['Sosis','Mayo','Gurih'] },
+  { name:'Telur Sosis Mayo', price:'Rp 14.000', priceN:14000, img:IMG.sosisMayo,  badge:'',    cat:'Roti Asin', desc:'Kombinasi telur + sosis + mayo dalam satu roti kukus lembut. Triple nikmat yang mengenyangkan!', tags:['Telur','Sosis','Mayo','Komplit'] },
+  { name:'Beef Mayo',        price:'Rp 15.000', priceN:15000, img:IMG.beef,       badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Asin', desc:'Daging beef berbumbu yang juicy dipadukan mayo creamy. Best seller di kategori asin — wajib masuk daftar wajib coba!', tags:['Best Seller','Beef','Mayo','Daging'] },
+  { name:'Beef Sosis Mayo',  price:'Rp 17.000', priceN:17000, img:IMG.beef,       badge:'',    cat:'Roti Asin', desc:'Gabungan beef berbumbu dan sosis dengan mayo. Dobel protein, dobel nikmat untuk kamu yang butuh energi lebih!', tags:['Beef','Sosis','Mayo','Dobel Protein'] },
+  { name:'Telur Beef',       price:'Rp 18.000', priceN:18000, img:IMG.telurBeef,  badge:'',    cat:'Roti Asin', desc:'Perpaduan telur dan beef berbumbu yang sempurna dan mengenyangkan. Pilihan ideal untuk makan siang atau malam.', tags:['Telur','Beef','Mengenyangkan'] },
+  { name:'Double Beef',      price:'Rp 19.000', priceN:19000, img:IMG.doubleBeef, badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Asin', desc:'Dobel porsi daging beef berbumbu untuk kamu yang mau kenyang maksimal. Best seller yang tidak pernah habis permintaannya!', tags:['Best Seller','Double Beef','Premium','Porsi Besar'] },
+  { name:'Telur Beef Sosis', price:'Rp 19.000', priceN:19000, img:IMG.telurBeef,  badge:'hot', badgeLabel:'Best Seller 👍', cat:'Roti Asin', desc:'Kombo paling lengkap: telur + beef + sosis dalam satu roti. Best seller #1 yang selalu paling banyak dipesan pelanggan Rokkus!', tags:['Best Seller','Telur','Beef','Sosis','Paling Komplit'] },
+];
+
+const TAMBAHAN = [
+  { name:'Keju Slice', price:'Rp 2.000', priceN:2000, img:IMG.kejuSlice, badge:'new', badgeLabel:'New ★',        cat:'Tambahan', desc:'Upgrade roti kamu dengan lembaran keju slice premium! Makin gurih, makin creamy, makin puas.', tags:['New','Keju Slice','Upgrade'] },
+  { name:'Keju Parut', price:'Rp 3.000', priceN:3000, img:IMG.kejuParut, badge:'hot', badgeLabel:'Recommended 👍', cat:'Tambahan', desc:'Taburan keju parut melimpah untuk tambahan rasa gurih manis. Paling sering dipilih pelanggan untuk upgrade!', tags:['Recommended','Keju Parut','Topping'] },
+  { name:'Telur',      price:'Rp 3.000', priceN:3000, img:IMG.telur,     badge:'',    cat:'Tambahan', desc:'Tambah telur untuk protein ekstra dan rasa yang lebih kaya. Cocok ditambahkan ke roti asin maupun manis.', tags:['Telur','Protein','Topping'] },
+  { name:'Selai Lain', price:'Rp 3.000', priceN:3000, img:IMG.selai,     badge:'',    cat:'Tambahan', desc:'Pilih selai tambahan sesuai selera kamu. Tersedia berbagai pilihan untuk melengkapi roti kukus favoritmu!', tags:['Selai','Custom','Pilihan Bebas'] },
+];
+
+const ALL_PRODUCTS = [...MANIS, ...ASIN, ...TAMBAHAN];
+
+// ── RENDER ──
+function makeCard(p, isTambahan) {
+  if (isTambahan) {
+    const c = document.createElement('div');
+    c.className = 'tambahan-card';
+    c.onclick = () => openModal(p);
+    c.innerHTML = '<div class="tambahan-img-wrap"><img src="'+p.img+'" alt="'+p.name+'" loading="lazy"></div><div class="tambahan-name">'+p.name+'</div><div class="tambahan-price">'+p.price+'</div>';
+    return c;
+  }
+  const c = document.createElement('div');
+  c.className = 'product-card';
+  c.onclick = () => openModal(p);
+  const pillHtml = p.badge ? '<span class="pill '+(p.badge==='new'?'pill-new':p.badge==='hot'?'pill-hot':'pill-star')+'">'+p.badgeLabel+'</span>' : '';
+  c.innerHTML = '<div class="card-img"><img src="'+p.img+'" alt="'+p.name+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .5s ease;">'+pillHtml+'</div><div class="card-body"><div class="card-name">'+p.name+'</div><div class="card-cat">'+p.cat+'</div><div class="card-footer"><div class="card-price"><small>mulai</small>'+p.price+'</div><button class="card-eye" title="Detail">👁</button></div></div>';
+  return c;
+}
+
+function renderAll() {
+  const gm = document.getElementById('grid-manis');
+  const ga = document.getElementById('grid-asin');
+  const gt = document.getElementById('grid-tambahan');
+  gm.innerHTML=''; ga.innerHTML=''; gt.innerHTML='';
+  MANIS.forEach(p => gm.appendChild(makeCard(p, false)));
+  ASIN.forEach(p => ga.appendChild(makeCard(p, false)));
+  TAMBAHAN.forEach(p => gt.appendChild(makeCard(p, true)));
+  populateOrderSelect();
+}
+
+function filterAll(el) {
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sec-manis').style.display='';
+  document.getElementById('sec-asin').style.display='';
+  document.getElementById('sec-tambahan').style.display='';
+  document.getElementById('paketSection').style.display='';
+}
+function filterCat(cat, el) {
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sec-manis').style.display = cat==='manis'?'':'none';
+  document.getElementById('sec-asin').style.display = cat==='asin'?'':'none';
+  document.getElementById('sec-tambahan').style.display = cat==='tambahan'?'':'none';
+  document.getElementById('paketSection').style.display = cat==='tambahan'?'none':'';
+}
+
+// ── MODAL ──
+function openModal(p) {
+  const emojiEl = document.getElementById('mEmoji');
+  emojiEl.innerHTML = '<img src="'+p.img+'" alt="'+p.name+'" style="width:100%;height:100%;object-fit:cover;border-radius:0;">';
+  document.getElementById('mPrice').textContent = p.price;
+  document.getElementById('mCat').textContent = p.cat;
+  document.getElementById('mName').textContent = p.name;
+  document.getElementById('mDesc').textContent = p.desc;
+  const pills = p.badge ? ['<span class="mpill">'+(p.badgeLabel||'')+'</span>'] : [];
+  document.getElementById('mPills').innerHTML = pills.join('');
+  document.getElementById('mTags').innerHTML = p.tags.map(t=>'<span class="modal-tag">'+t+'</span>').join('');
+  const msg = encodeURIComponent('Halo Rokkus! 👋 Saya mau pesan *'+p.name+'* ('+p.price+'). Bisa bantu saya? 😊');
+  document.getElementById('mWaBtn').onclick = () => window.open('https://wa.me/6208229912121?text='+msg,'_blank');
+  document.getElementById('modalOv').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMod(e) { if(e.target===document.getElementById('modalOv')) closeModDirect(); }
+function closeModDirect() { document.getElementById('modalOv').classList.remove('open'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModDirect(); });
+
+// ── NAV ──
+function showSec(name, el) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else document.querySelectorAll('.nav-tab').forEach(t=>{ if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes(name)) t.classList.add('active'); });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── ORDER FORM ──
+function populateOrderSelect() {
+  const sel = document.getElementById('oProd');
+  sel.innerHTML = '<option value="">-- Pilih Produk --</option>';
+  const groups = [['🍫 Roti Manis', MANIS], ['🥩 Roti Asin', ASIN]];
+  groups.forEach(([label, arr]) => {
+    const og = document.createElement('optgroup');
+    og.label = label;
+    arr.forEach(p => { const o=document.createElement('option'); o.textContent=`${p.name} — ${p.price}`; og.appendChild(o); });
+    sel.appendChild(og);
+  });
+}
+
+function sendWA() {
+  const name = document.getElementById('oName').value || 'Pelanggan';
+  const prod = document.getElementById('oProd').value || 'produk pilihan';
+  const qty = document.getElementById('oQty').value || '1';
+  const tambahan = document.getElementById('oTambahan').value || 'Tidak ada';
+  const note = document.getElementById('oNote').value || '-';
+  const msg = encodeURIComponent(`Halo Rokkus! 👋\n*Nama:* ${name}\n*Pesan:* ${prod} x${qty}\n*Tambahan:* ${tambahan}\n*Catatan:* ${note}\n\nMohon dibantu ya kak! 🙏`);
+  window.open(`https://wa.me/6208229912121?text=${msg}`,'_blank');
+}
+
+renderAll();
+</script>
+</body>
+</html>
