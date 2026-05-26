@@ -3,8 +3,8 @@
 // KONFIGURASI SUPABASE — jangan share file ini!
 // ─────────────────────────────────────────
 
-const SUPABASE_URL = 'https://wmqtngznenqaajuxdqwa.supabase.co/rest/v1/'
-const SUPABASE_ANON_KEY = 'sb_publishable_1b2VY4us3xjYBWLHy8zV7A_2JH3Rfmr'
+const SUPABASE_URL = 'https://wmqtngznenqaajuxdqwa.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtcXRuZ3puZW5xYWFqdXhkcXdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MDkyMjIsImV4cCI6MjA5NDk4NTIyMn0.X9lUYfU-3wOHC5huJAWBmyNYJCiKJGntdh7XCJx3ASA'
 
 // Init client
 const { createClient } = supabase
